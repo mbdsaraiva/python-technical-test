@@ -139,14 +139,14 @@ class MatriculaSerializer(serializers.ModelSerializer):
         aluno = data.get('aluno')
         curso = data.get('curso')
 
-        # Verifica se ja existe matricula (apenas ao criar, nao ao editar)
+        # verifica se ja existe matricula (apenas ao criar, nao ao editar)
         if self.instance is None:  # Se instance é None, cria
             if Matricula.objects.filter(aluno=aluno, curso=curso).exists():
                 raise serializers.ValidationError(
                     "Este aluno ja esta matriculado neste curso."
                 )
 
-        # Verifica se o curso esta ativo
+        # verifica se o curso esta ativo
         if curso.status == 'INATIVO':
             raise serializers.ValidationError(
                 "Nao eh possivel matricular em curso inativo."
