@@ -8,7 +8,7 @@ class AlunoSerializer(serializers.ModelSerializer):
     converte objetos Python (Model) em JSON e vice-versa.
     e alem disso faz validacoes dos dados.
     """
-    # Campos calculados
+    # campos calculados
     total_devido = serializers.SerializerMethodField()
     total_pago = serializers.SerializerMethodField()
     total_matriculas = serializers.SerializerMethodField()
@@ -43,14 +43,14 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     def validate_cpf(self, value):
         """validacao customizada do CPF"""
-        # Remove caracteres não numéricos
+        # remove caracteres nao numericos
         cpf = ''.join(filter(str.isdigit, value))
         
-        # Valida se tem 11 dígitos
+        # valida se tem 11 digitos
         if len(cpf) != 11:
             raise serializers.ValidationError("CPF deve ter 11 digitos.")
         
-        # Valida se não é sequência repetida (11111111111)
+        # Valida se nao eh sequencia repetida (11111111111)
         if cpf == cpf[0] * 11:
             raise serializers.ValidationError("CPF invalido.")
         
