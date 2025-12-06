@@ -161,6 +161,114 @@ def aluno_historico_view(request, pk):
     return render(request, 'core/aluno_historico.html', context)
 
 
+# ============================================
+# ENDPOINT COM SQL RAW (OBRIGATÓRIO DESAFIO)
+# ============================================
+from django.db import connection
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+
+
+@api_view(['GET'])
+def relatorio_sql_raw(request):
+    """
+    Endpoint que usa SQL RAW com JOIN e agregações.
+    GET /api/relatorio-sql/
+    
+    Retorna relatório financeiro completo de todos os alunos
+    usando consulta SQL pura com JOINS e agregações (SUM, COUNT, etc).
+    """
+    
+    # SQL puro com JOIN e agregações
+    sql_query = """
+        SELECT 
+            a.id as aluno_id,
+            a.nome as aluno_nome,
+            a.email as aluno_email,
+            a.cpf as aluno_cpf,
+            a.data_ingresso,
+            COUNT(m.id) as total_matriculas,
+            COUNT(CASE WHEN m.status = 'PAGO' THEN 1 END) as matriculas_pagas,
+            COUNT(CASE WHEN m.status = 'PENDENTE' THEN 1 END) as matriculas_pendentes,
+            COALESCE(SUM(CASE WHEN m.status = 'PAGO' THEN c.valor_inscricao ELSE 0 END), 0) as total_pago,
+            COALESCE(SUM(CASE WHEN m.status = 'PENDENTE' THEN c.valor_inscricao ELSE 0 END), 0) as total_devido,
+            COALESCE(SUM(c.valor_inscricao), 0) as total_geral
+        FROM core_aluno a
+        LEFT JOIN core_matricula m ON a.id = m.aluno_id
+        LEFT JOIN core_curso c ON m.curso_id = c.id
+        GROUP BY a.id, a.nome, a.email, a.cpf, a.data_ingresso
+        ORDER BY total_geral DESC
+    """
+    
+    # Executar SQL raw usando cursor
+    with connection.cursor() as cursor:
+        cursor.execute(sql_query)
+        columns = [col[0] for col in cursor.description]
+        results = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+    
+    # Converter Decimal para float para JSON
+    for result in results:
+        result['total_pago'] = float(result['total_pago'])
+        result['total_devido'] = float(result['total_devido'])
+        result['total_geral'] = float(result['total_geral'])
+        result['data_ingresso'] = result['data_ingresso'].strftime('%Y-%m-%d') if result['data_ingresso'] else None
+    
+    return Response({
+        'mensagem': 'Relatório gerado usando SQL RAW com JOIN e agregações',
+        'total_alunos': len(results),
+        'alunos': results
+    })
+
+
+@api_view(['GET'])
+def cursos_populares_sql_raw(request):
+    """
+    Endpoint alternativo com SQL RAW.
+    GET /api/cursos-populares-sql/
+    
+    Lista cursos mais populares usando SQL puro.
+    """
+    
+    sql_query = """
+        SELECT 
+            c.id as curso_id,
+            c.nome as curso_nome,
+            c.carga_horaria,
+            c.valor_inscricao,
+            c.status,
+            COUNT(m.id) as total_matriculas,
+            COUNT(CASE WHEN m.status = 'PAGO' THEN 1 END) as matriculas_pagas,
+            COUNT(CASE WHEN m.status = 'PENDENTE' THEN 1 END) as matriculas_pendentes,
+            COALESCE(SUM(CASE WHEN m.status = 'PAGO' THEN c.valor_inscricao ELSE 0 END), 0) as total_arrecadado
+        FROM core_curso c
+        LEFT JOIN core_matricula m ON c.id = m.curso_id
+        GROUP BY c.id, c.nome, c.carga_horaria, c.valor_inscricao, c.status
+        ORDER BY total_matriculas DESC
+    """
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql_query)
+        columns = [col[0] for col in cursor.description]
+        results = [
+            dict(zip(columns, row))
+            for row in cursor.fetchall()
+        ]
+    
+    # Converter Decimal para float
+    for result in results:
+        result['valor_inscricao'] = float(result['valor_inscricao'])
+        result['total_arrecadado'] = float(result['total_arrecadado'])
+    
+    return Response({
+        'mensagem': 'Cursos populares usando SQL RAW',
+        'total_cursos': len(results),
+        'cursos': results
+    })
+
+
 class CursoViewSet(viewsets.ModelViewSet):
     """
     ViewSet para gerenciar Cursos.
