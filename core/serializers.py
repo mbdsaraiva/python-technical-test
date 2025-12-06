@@ -173,7 +173,7 @@ class MatriculaCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "este aluno ja esta matriculado neste curso."
             )
-
+        
         if curso.status == 'INATIVO':
             raise serializers.ValidationError(
                 "Nao eh possivel matricular em curso inativo."
