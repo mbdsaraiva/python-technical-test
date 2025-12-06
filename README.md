@@ -6,14 +6,15 @@ Complete management system for students, courses and enrollments developed with 
 
 This project was developed as part of the technical challenge for the Python/Django development internship position. The system allows complete management of a course academy, including student registration, courses, enrollments and financial control.
 
-## 🚀 Technologies Used
+## Tecnologias Utilizadas
 
-- **Python 3.12** - Programming language
-- **Django 5.1.3** - Web framework
-- **Django Rest Framework 3.15.2** - REST API
-- **PostgreSQL 16** - Relational database
-- **Docker & Docker Compose** - Containerization
-- **HTML/CSS** - Web interface
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
+![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&labelColor=gray)
+![PostgreSQL](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
+![HTML](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 
 ## ✨ Features
 
