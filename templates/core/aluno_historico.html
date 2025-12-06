@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}Histórico - {{ aluno.nome }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>👤 Informações do Aluno</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        <div>
+            <p style="color: #718096; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Nome Completo</p>
+            <p style="font-size: 1.25rem; font-weight: 700; color: #2d3748;">{{ aluno.nome }}</p>
+        </div>
+        <div>
+            <p style="color: #718096; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">E-mail</p>
+            <p style="font-size: 1.125rem; color: #4a5568;">{{ aluno.email }}</p>
+        </div>
+        <div>
+            <p style="color: #718096; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">CPF</p>
+            <p style="font-size: 1.125rem; font-family: 'Courier New', monospace; color: #4a5568;">{{ aluno.cpf }}</p>
+        </div>
+        <div>
+            <p style="color: #718096; font-size: 0.875rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.5rem;">Data de Ingresso</p>
+            <p style="font-size: 1.125rem; color: #4a5568;">{{ aluno.data_ingresso|date:"d/m/Y" }}</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>💰 Situação Financeira</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card green">
+            <h3>R$ {{ total_pago|floatformat:2 }}</h3>
+            <p>Total Pago</p>
+        </div>
+        
+        <div class="stat-card orange">
+            <h3>R$ {{ total_devido|floatformat:2 }}</h3>
+            <p>Total Pendente</p>
+        </div>
+        
+        <div class="stat-card blue">
+            <h3>R$ {{ total_geral|floatformat:2 }}</h3>
+            <p>Total Geral</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>📚 Histórico de Matrículas</h2>
+    
+    {% if matriculas %}
+    <table>
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th style="text-align: center;">Data Matrícula</th>
+                <th style="text-align: center;">Carga Horária</th>
+                <th style="text-align: right;">Valor</th>
+                <th style="text-align: center;">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for matricula in matriculas %}
+            <tr>
+                <td style="font-weight: 600; color: #2d3748;">{{ matricula.curso.nome }}</td>
+                <td style="text-align: center; color: #718096;">
+                    {{ matricula.data_matricula|date:"d/m/Y" }}
+                </td>
+                <td style="text-align: center; color: #718096;">
+                    {{ matricula.curso.carga_horaria }}h
+                </td>
+                <td style="text-align: right; font-weight: 600; color: #2d3748;">
+                    R$ {{ matricula.curso.valor_inscricao|floatformat:2 }}
+                </td>
+                <td style="text-align: center;">
+                    {% if matricula.status == 'PAGO' %}
+                        <span class="badge badge-success">✓ PAGO</span>
+                    {% else %}
+                        <span class="badge badge-warning">⏳ PENDENTE</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 2rem; padding-top: 2rem; border-top: 2px solid #e2e8f0;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <p style="color: #718096; font-size: 0.875rem; margin-bottom: 0.25rem;">Total de Matrículas</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: #2d3748;">{{ matriculas|length }}</p>
+            </div>
+            <div style="text-align: right;">
+                <p style="color: #718096; font-size: 0.875rem; margin-bottom: 0.25rem;">Carga Horária Total</p>
+                <p style="font-size: 1.5rem; font-weight: 700; color: #667eea;">
+                    {% widthratio matriculas|length 1 1 as total %}
+                    {% for m in matriculas %}
+                        {% if forloop.first %}{{ m.curso.carga_horaria }}{% endif %}
+                    {% endfor %}
+                    {% for m in matriculas %}
+                        {% if not forloop.first %}
+                            {% widthratio 1 1 1 as soma %}
+                        {% endif %}
+                    {% endfor %}
+                    <!-- Soma simplificada -->
+                    {% with total_horas=0 %}
+                        {% for m in matriculas %}
+                            {% widthratio m.curso.carga_horaria 1 1 as h %}
+                        {% endfor %}
+                    {% endwith %}
+                    {% for m in matriculas %}{{ m.curso.carga_horaria }}{% if not forloop.last %}+{% endif %}{% endfor %} = 
+                    {% widthratio matriculas|length 1 1 as count %}
+                    <!-- Cálculo manual da soma -->
+                    {% if matriculas|length == 1 %}{{ matriculas.0.curso.carga_horaria }}{% endif %}
+                    {% if matriculas|length == 2 %}{% widthratio matriculas.0.curso.carga_horaria 1 1 as h1 %}{% widthratio matriculas.1.curso.carga_horaria 1 1 as h2 %}{% widthratio h1 1 1 as soma %}{% endif %}
+                    Total de horas
+                </p>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <p style="font-size: 1.125rem; margin-bottom: 1rem;">📭 Nenhuma matrícula registrada ainda.</p>
+        <a href="/admin/core/matricula/add/" class="btn">+ Cadastrar Primeira Matrícula</a>
+    </div>
+    {% endif %}
+</div>
+
+<div style="margin-top: 1.5rem;">
+    <a href="/alunos/" class="btn btn-secondary">← Voltar para Lista de Alunos</a>
+</div>
+{% endblock %}
