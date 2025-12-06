@@ -288,14 +288,6 @@ All mandatory requirements were implemented:
 
 ## 👨‍💻 Author
 
-**Matheus Silva**
+**Matheus Saraiva**
 
 Developed as part of the technical challenge for the Python/Django Developer Internship position - 2026.1
-
-## 📄 License
-
-This project was developed for educational and evaluation purposes.
-
----
-
-**Important**: This is a development environment. For production, additional security configurations would be necessary.
