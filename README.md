@@ -6,7 +6,7 @@ Complete management system for students, courses and enrollments developed with 
 
 This project was developed as part of the technical challenge for the Python/Django development internship position. The system allows complete management of a course academy, including student registration, courses, enrollments and financial control.
 
-## Tecnologias Utilizadas
+## Technologies
 
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
