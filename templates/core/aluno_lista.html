@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Alunos{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>👥 Lista de Alunos</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>CPF</th>
+                <th>Data Ingresso</th>
+                <th>Total Devido</th>
+                <th>Total Pago</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.nome }}</td>
+                <td>{{ aluno.email }}</td>
+                <td>{{ aluno.cpf }}</td>
+                <td>{{ aluno.data_ingresso|date:"d/m/Y" }}</td>
+                <td style="color: #e67e22;">R$ {{ aluno.total_devido|floatformat:2 }}</td>
+                <td style="color: #27ae60;">R$ {{ aluno.total_pago|floatformat:2 }}</td>
+                <td>
+                    <a href="/alunos/{{ aluno.id }}/" class="btn" style="padding: 0.25rem 0.75rem; font-size: 0.875rem;">
+                        Ver Histórico
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="text-align: center; color: #999;">
+                    Nenhum aluno cadastrado. 
+                    <a href="/admin/core/aluno/add/">Cadastre o primeiro aluno</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

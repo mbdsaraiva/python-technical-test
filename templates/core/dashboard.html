@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Academia Dev Python{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>📊 Dashboard Geral</h2>
+    
+    <div class="stats-grid">
+        <div class="stat-card blue">
+            <h3>{{ total_alunos }}</h3>
+            <p>Total de Alunos</p>
+        </div>
+        
+        <div class="stat-card green">
+            <h3>{{ cursos_ativos }}</h3>
+            <p>Cursos Ativos</p>
+        </div>
+        
+        <div class="stat-card">
+            <h3>{{ total_matriculas }}</h3>
+            <p>Total de Matrículas</p>
+        </div>
+        
+        <div class="stat-card orange">
+            <h3>{{ matriculas_pendentes }}</h3>
+            <p>Matrículas Pendentes</p>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <h2>💰 Resumo Financeiro</h2>
+    
+    <table>
+        <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+        </tr>
+        <tr>
+            <td>Total Arrecadado (Pago)</td>
+            <td style="color: #27ae60; font-weight: bold;">R$ {{ total_pago|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td>Total Pendente</td>
+            <td style="color: #e67e22; font-weight: bold;">R$ {{ total_pendente|floatformat:2 }}</td>
+        </tr>
+        <tr>
+            <td><strong>Total Geral</strong></td>
+            <td><strong>R$ {{ total_geral|floatformat:2 }}</strong></td>
+        </tr>
+    </table>
+</div>
+
+<div class="card">
+    <h2>📈 Matrículas: Pagas vs Pendentes</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Quantidade</th>
+                <th>Percentual</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><span class="badge badge-success">PAGO</span></td>
+                <td>{{ matriculas_pagas }}</td>
+                <td>{{ percentual_pagas|floatformat:1 }}%</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-warning">PENDENTE</span></td>
+                <td>{{ matriculas_pendentes }}</td>
+                <td>{{ percentual_pendentes|floatformat:1 }}%</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>📚 Cursos Mais Populares</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Curso</th>
+                <th>Total de Matrículas</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for curso in cursos_populares %}
+            <tr>
+                <td>{{ curso.nome }}</td>
+                <td>{{ curso.total_matriculas }}</td>
+                <td>
+                    {% if curso.status == 'ATIVO' %}
+                        <span class="badge badge-success">{{ curso.status }}</span>
+                    {% else %}
+                        <span class="badge badge-warning">{{ curso.status }}</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" style="text-align: center; color: #999;">Nenhum curso cadastrado</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
