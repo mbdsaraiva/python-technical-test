@@ -165,20 +165,17 @@ SELECT
 
 -- exemplos para testes
 
--- exempo alunos
 INSERT INTO core_aluno (nome, email, cpf, data_ingresso) VALUES
 ('João Silva', 'joao@email.com', '12345678901', '2024-01-15'),
 ('Maria Santos', 'maria@email.com', '98765432109', '2024-02-20'),
 ('Pedro Oliveira', 'pedro@email.com', '45678912345', '2024-03-10');
 
--- exemplo cursos
 INSERT INTO core_curso (nome, carga_horaria, valor_inscricao, status) VALUES
 ('Python Avançado', 80, 1500.00, 'ATIVO'),
 ('Django Web Development', 120, 2000.00, 'ATIVO'),
 ('Data Science com Python', 100, 1800.00, 'ATIVO'),
 ('Machine Learning Básico', 60, 1200.00, 'INATIVO');
 
--- exemplo de matriculas
 INSERT INTO core_matricula (aluno_id, curso_id, data_matricula, status) VALUES
 (1, 1, '2024-01-20', 'PAGO'),
 (1, 2, '2024-02-15', 'PENDENTE'),
