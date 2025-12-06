@@ -121,7 +121,7 @@ Docker will:
 ```bash
 # Clone the repository
 git clone https://github.com/mbdsaraiva/Academia-dev-python.git
-cd python
+cd Academia-dev-python
 
 # Create virtual environment
 python -m venv venv
