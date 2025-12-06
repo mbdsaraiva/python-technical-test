@@ -80,10 +80,20 @@ python/
 
 ### Option 1: With Docker (Recommended)
 
+### ⚡ Quick Start
+
+**Recommended**: Use Docker for the easiest setup! No need to install PostgreSQL, Python packages, or configure anything manually. Just run:
+```bash
+docker-compose up --build
+```
+Everything will be automatically configured and ready to use! 🚀
+
+### ⚡ Steps
+
 ```bash
 # Clone the repository
-git clone <your-repository>
-cd python
+git clone https://github.com/mbdsaraiva/Academia-dev-python.git
+cd Academia-dev-python
 
 # Run with Docker Compose
 docker-compose up --build
@@ -110,7 +120,7 @@ Docker will:
 
 ```bash
 # Clone the repository
-git clone <your-repository>
+git clone https://github.com/mbdsaraiva/Academia-dev-python.git
 cd python
 
 # Create virtual environment
